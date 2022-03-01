@@ -8,7 +8,7 @@ const connectDB = require("./config/db");
 const User = require("./models/User");
 const cors = require("cors");
 const corsOptions ={
-  origin:'http://localhost:3000', 
+  origin:'*', 
   credentials:true,
   optionSuccessStatus:200
 }
@@ -60,6 +60,7 @@ app.get("/user/:id", async (req, res) => {
 //Handle of PATCH request is working but i haven't done full research how it should really look like
 //$addToSet operator is not very clear for me, i'm just trying to push 4 diferent objects builded from the body of the request
 //to 4 diferent arrays nested inside User model
+// https://stackoverflow.com/questions/71288634/struggle-with-mongoose-query-pushing-different-objects-into-different-arrays-in
 
 app.patch("/user/:id", async (req, res) => {
   let user = await User.findOneAndUpdate(
