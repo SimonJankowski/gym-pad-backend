@@ -49,13 +49,35 @@ app.post('/register' , async (req,res)=>{
   res.send(newGoogleUser)
 })
 
-app.get('/user/:id', async (req,res)=>{
-  const user = await User.find({id:req.params.id})
-  console.log(user)
-
+app.get("/user/:id", async (req, res) => {
+  const user = await User.findOne({ id: req.params.id });
+  console.log(user);
+  if (!user)
+    return res.status(404).send("The user with this id was not found.");
   return res.send(user);
-  
-})
+});
+
+//Handle of PATCH request is working but i haven't done full research how it should really look like
+//$addToSet operator is not very clear for me, i'm just trying to push 4 diferent objects builded from the body of the request
+//to 4 diferent arrays nested inside User model
+
+app.patch("/user/:id", async (req, res) => {
+  let user = await User.findOneAndUpdate(
+    { id: req.params.id },
+    {  $addToSet:
+       {"stats.bodyweight":{date: req.body.timestamp, value: req.body.bodyweight}},
+       $addToSet:
+       {"stats.waist":{date: req.body.timestamp, value: req.body.waist}},
+       $addToSet:
+       {"stats.benchpress":{date: req.body.timestamp, value: req.body.benchpress}},
+       $addToSet:
+       {"stats.biceps":{date: req.body.timestamp, value: req.body.biceps}}
+    }
+  );
+  //console.log(user.stats);
+  //console.log(req.body);
+  return res.send("got it");
+});
 
 const PORT = process.env.PORT || 3002
 app.listen(PORT, ()=>{
