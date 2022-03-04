@@ -50,6 +50,7 @@ app.post('/register' , async (req,res)=>{
 })
 
 app.get("/user/:id", async (req, res) => {
+  if(req.params.id===null) return res.send("null casted as ID")
   const user = await User.findOne({ id: req.params.id });
   console.log(user);
   if (!user) {
@@ -70,18 +71,20 @@ app.get("/user/:id", async (req, res) => {
 app.patch("/user/:id", async (req, res) => {
   let user = await User.findOneAndUpdate(
     { id: req.params.id },
-    {  $addToSet:
-       {"stats.bodyweight":{date: req.body.timestamp, value: req.body.bodyweight}},
-       $addToSet:
-       {"stats.waist":{date: req.body.timestamp, value: req.body.waist}},
-       $addToSet:
-       {"stats.benchpress":{date: req.body.timestamp, value: req.body.benchpress}},
-       $addToSet:
-       {"stats.biceps":{date: req.body.timestamp, value: req.body.biceps}}
+    {  $push:
+       {"stats.bodyweight":{date: req.body.timestamp, value: req.body.bodyweight},
+      
+       "stats.waist":{date: req.body.timestamp, value: req.body.waist},
+     
+       "stats.benchpress":{date: req.body.timestamp, value: req.body.benchpress},
+     
+       "stats.biceps":{date: req.body.timestamp, value: req.body.biceps}
     }
+  }
   );
-  //console.log(user.stats);
-  //console.log(req.body);
+  console.log("should be updated")
+  console.log(user.stats);
+  console.log(req.body);
   return res.send("got it");
 });
 
