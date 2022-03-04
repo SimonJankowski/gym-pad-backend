@@ -52,9 +52,14 @@ app.post('/register' , async (req,res)=>{
 app.get("/user/:id", async (req, res) => {
   const user = await User.findOne({ id: req.params.id });
   console.log(user);
-  if (!user)
-    return res.status(404).send("The user with this id was not found.");
-  return res.send(user);
+  if (!user) {
+    console.log("request usera co nie ma")
+    return res.send("The user with this id was not found.");
+  } else {
+    return res.send(user);
+  }
+   
+  
 });
 
 //Handle of PATCH request is working but i haven't done full research how it should really look like
