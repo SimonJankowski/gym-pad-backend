@@ -82,7 +82,6 @@ app.patch("/user/:id", async (req, res) => {
     }
   }
   );
-  console.log("should be updated")
   console.log(user.stats);
   console.log(req.body);
   return res.send("got it");
