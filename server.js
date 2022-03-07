@@ -59,8 +59,6 @@ app.get("/user/:id", async (req, res) => {
   } else {
     return res.send(user);
   }
-   
-  
 });
 
 //Handle of PATCH request is working but i haven't done full research how it should really look like
@@ -80,11 +78,9 @@ app.patch("/user/:id", async (req, res) => {
      
        "stats.biceps":{date: req.body.timestamp, value: req.body.biceps}
     }
-  }
+  },  { returnNewDocument: true, returnDocument: "after" }
   );
-  console.log(user.stats);
-  console.log(req.body);
-  return res.send("got it");
+  return res.send(user);
 });
 
 const PORT = process.env.PORT || 3002
